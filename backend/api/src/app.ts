@@ -261,12 +261,12 @@ process.on('SIGTERM', () => void gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => void gracefulShutdown('SIGINT'));
 
 process.on('unhandledRejection', (reason) => {
-  logger.error({ reason }, 'Unhandled promise rejection');
+  logger.error(reason instanceof Error ? reason : { reason }, 'Unhandled promise rejection');
   process.exit(1);
 });
 
 process.on('uncaughtException', (err) => {
-  logger.error({ err }, 'Uncaught exception');
+  logger.error(err, 'Uncaught exception');
   process.exit(1);
 });
 

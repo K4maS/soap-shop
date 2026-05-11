@@ -18,8 +18,8 @@ export const redis = new Redis({
     }
     return Math.min(times * 200, 5000);
   },
-  lazyConnect: false,
-  enableOfflineQueue: false,
+  lazyConnect: true,
+  enableOfflineQueue: true,
   connectTimeout: 5000,
   commandTimeout: 3000,
   // Security: отключаем небезопасные команды

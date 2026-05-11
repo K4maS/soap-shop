@@ -22,8 +22,8 @@ export const redis = new Redis({
     logger.warn({ times, delay }, 'Redis: retrying connection');
     return delay;
   },
-  lazyConnect: false,
-  enableOfflineQueue: false,
+  lazyConnect: true,
+  enableOfflineQueue: true,
   connectTimeout: 5000,
   commandTimeout: 3000,
 });

@@ -53,8 +53,8 @@ services:
 
   auth-service:
     build:
-      context: ./backend
-      dockerfile: ./auth-service/Dockerfile
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
       target: builder  # Используем builder stage для dev
     container_name: mylo_dev_auth
     command: npx tsx src/app.ts
@@ -72,7 +72,7 @@ services:
       - JWT_REFRESH_SECRET=dev-refresh-secret-minimum-32-chars-long
       - JWT_ACCESS_EXPIRES=15m
       - JWT_REFRESH_EXPIRES=7d
-      - ENCRYPTION_KEY=ZGV2LWVuY3J5cHRpb24ta2V5LTMyLWJ5dGVzIQ==
+      - ENCRYPTION_KEY=dGVzdGtleXRlc3RrZXl0ZXN0a2V5dGVzdGtleXRlc3Q=
       - CSRF_SECRET=dev-csrf-secret-minimum-32-chars
       - SMS_PROVIDER=mock  # OTP выводится в консоль
       - BCRYPT_ROUNDS=10  # Быстрее для разработки
@@ -106,7 +106,7 @@ services:
       - REDIS_PORT=6379
       - REDIS_PASSWORD=devredispassword
       - JWT_ACCESS_SECRET=dev-access-secret-minimum-32-chars-long
-      - ENCRYPTION_KEY=ZGV2LWVuY3J5cHRpb24ta2V5LTMyLWJ5dGVzIQ==
+      - ENCRYPTION_KEY=dGVzdGtleXRlc3RrZXl0ZXN0a2V5dGVzdGtleXRlc3Q=
       - LOG_LEVEL=debug
       - CORS_ORIGINS=http://localhost:5173,http://localhost:4173
       - UPLOAD_PROVIDER=local
@@ -124,8 +124,8 @@ services:
 
   admin-service:
     build:
-      context: ./backend
-      dockerfile: ./admin-service/Dockerfile
+      context: ./backend/admin-service
+      dockerfile: Dockerfile
       target: builder
     container_name: mylo_dev_admin
     command: npx tsx src/app.ts
