@@ -25,7 +25,7 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(['development', 'test', 'production'])
     .default('development'),
-  ADMIN_PORT: z.coerce.number().int().default(3003),
+  PORT: z.coerce.number().int().default(3003),
   DATABASE_URL: z.string().min(10),
   REDIS_HOST: z.string().default('redis'),
   REDIS_PORT: z.coerce.number().int().default(6379),
@@ -33,7 +33,7 @@ const envSchema = z.object({
   JWT_ACCESS_SECRET: z.string().min(32),
   CORS_ORIGINS: z.string().default('http://localhost:5174'),
   LOG_LEVEL: z
-    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
     .default('info'),
   AUDIT_LOG_RETENTION_DAYS: z.coerce.number().int().min(30).default(90),
 });
@@ -79,7 +79,8 @@ const redis = new Redis({
     if (times > 10) return null;
     return Math.min(times * 200, 5000);
   },
-  enableOfflineQueue: false,
+  lazyConnect: true,
+  enableOfflineQueue: true,
 });
 
 redis.on('error', (err: Error) => logger.error({ err }, 'Redis error'));
@@ -696,14 +697,14 @@ async function gracefulShutdown(signal: string): Promise<void> {
 process.on('SIGTERM', () => void gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => void gracefulShutdown('SIGINT'));
 process.on('unhandledRejection', (reason) => {
-  logger.error({ reason }, 'Unhandled rejection in admin-service');
+  logger.error(reason instanceof Error ? reason : { reason }, 'Unhandled rejection in admin-service');
   process.exit(1);
 });
 
 // ─── Start ─────────────────────────────────────────────────────
 
-const server = app.listen(cfg.ADMIN_PORT, () => {
-  logger.info({ port: cfg.ADMIN_PORT, env: cfg.NODE_ENV }, 'Admin service started');
+const server = app.listen(cfg.PORT, () => {
+  logger.info({ port: cfg.PORT, env: cfg.NODE_ENV }, 'Admin service started');
 });
 
 server.on('error', (err) => {
