@@ -140,6 +140,14 @@ mylo-master/
 | GET | `/api/v1/orders/:id` | customer | Order detail |
 | PATCH | `/api/v1/orders/:id/status` | staff | Update status |
 
+### Payments (api :3001)
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | `/api/v1/payments/initiate` | customer | Start YooKassa payment |
+| GET | `/api/v1/payments/:id/status` | customer | Get payment status |
+| POST | `/api/v1/payments/webhook` | — | YooKassa webhook handler |
+
 ### Cart (api :3001)
 
 | Method | Path | Auth |

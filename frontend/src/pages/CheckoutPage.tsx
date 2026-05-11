@@ -354,23 +354,31 @@ export default function CheckoutPage() {
               </div>
             </dl>
 
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
-              isLoading={orderMutation.isPending}
-              loadingText="Оформляем заказ..."
-            >
-              Подтвердить заказ
-            </Button>
+            <div className="space-y-4 pt-2">
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  required
+                  className="mt-1 h-4 w-4 rounded border-warm-300 text-sage-600 focus:ring-sage-500 cursor-pointer"
+                />
+                <span className="text-xs text-warm-500 leading-snug group-hover:text-warm-700 transition-colors">
+                  Даю согласие на{' '}
+                  <Link to="/privacy" className="text-sage-600 hover:underline">обработку персональных данных</Link> и принимаю условия{' '}
+                  <Link to="/terms" className="text-sage-600 hover:underline">публичной оферты</Link>
+                </span>
+              </label>
 
-            <p className="text-xs text-warm-400 text-center">
-              Нажимая кнопку, вы соглашаетесь с{' '}
-              <Link to="/terms" className="underline hover:text-warm-600">
-                условиями использования
-              </Link>
-            </p>
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                fullWidth
+                isLoading={orderMutation.isPending}
+                loadingText="Оформляем заказ..."
+              >
+                Подтвердить заказ
+              </Button>
+            </div>
           </div>
         </aside>
       </form>

@@ -48,6 +48,18 @@ export const logger = pino({
     env: config.NODE_ENV,
     pid: process.pid,
   },
+  // In production, emit pure JSON. In development, use pino-pretty if available.
+  transport:
+    config.NODE_ENV === 'development'
+      ? {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            translateTime: 'SYS:standard',
+            ignore: 'pid,hostname',
+          },
+        }
+      : undefined,
 });
 
 /**
