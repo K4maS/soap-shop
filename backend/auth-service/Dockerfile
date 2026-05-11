@@ -1,22 +1,27 @@
 # =============================================================
 # Auth Service Dockerfile — multi-stage, non-root user
+# Base: node:20-slim (Debian Bookworm Slim, glibc)
+# Note: python3/make/g++ required for argon2 native addon
 # =============================================================
 
-# ─── Stage 1: Dependencies ────────────────────────────────
-FROM node:20-alpine AS deps
+# ─── Stage 1: Production dependencies ────────────────────────
+FROM node:20-slim AS deps
 WORKDIR /app
 
-# argon2 native addon requires build tools on Alpine
-RUN apk add --no-cache python3 make g++
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev && npm cache clean --force
 
-# ─── Stage 2: Builder (for development with tsx) ─────────
-FROM node:20-alpine AS builder
+# ─── Stage 2: Builder ─────────────────────────────────────────
+FROM node:20-slim AS builder
 WORKDIR /app
 
-RUN apk add --no-cache python3 make g++
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
 RUN npm ci
@@ -26,13 +31,14 @@ COPY src ./src
 COPY prisma ./prisma
 
 RUN npx prisma generate
-
 RUN npm run build
 
-# ─── Stage 3: Production ──────────────────────────────────
-FROM node:20-alpine AS production
+# ─── Stage 3: Production image ────────────────────────────────
+FROM node:20-slim AS production
 
-RUN addgroup -g 1001 -S appgroup &&     adduser -u 1001 -S appuser -G appgroup
+# Security: non-root user (Debian syntax)
+RUN groupadd --gid 1001 appgroup \
+    && useradd --uid 1001 --gid appgroup --shell /bin/false --no-create-home appuser
 
 WORKDIR /app
 
