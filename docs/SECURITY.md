@@ -65,7 +65,7 @@
 ### Infrastructure
 
 - [ ] All services run as non-root user (UID 1001)
-- [ ] Docker images based on `node:20-alpine` (minimal attack surface)
+- [ ] Docker images based on `node:20-slim` (minimal attack surface)
 - [ ] Redis requires password authentication
 - [ ] Automated backups scheduled and tested
 - [ ] SSL certificates auto-renewed via certbot

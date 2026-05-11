@@ -31,7 +31,7 @@ volumes:
 services:
   # ─── Nginx (единственная публичная точка входа) ────────────
   nginx:
-    image: nginx:1.25-alpine
+    image: nginx:1.25
     container_name: mylo_nginx
     restart: unless-stopped
     user: "101:101"
@@ -195,7 +195,7 @@ services:
 
   # ─── PostgreSQL ───────────────────────────────────────────
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16
     container_name: mylo_postgres
     restart: unless-stopped
     user: "70:70"
@@ -236,7 +236,7 @@ services:
 
   # ─── Redis ────────────────────────────────────────────────
   redis:
-    image: redis:7.2-alpine
+    image: redis:7.2
     container_name: mylo_redis
     restart: unless-stopped
     user: "999:999"

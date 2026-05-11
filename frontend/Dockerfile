@@ -1,13 +1,13 @@
 # =============================================================================
 # Mylo Master Frontend — Multi-stage Dockerfile
 # Stage 1: Build  (Node 20 + npm)
-# Stage 2: Serve  (nginx alpine, non-root user)
+# Stage 2: Serve  (nginx, non-root user)
 # =============================================================================
 
 # ---------------------------------------------------------------------------
 # Stage 1 — Dependencies
 # ---------------------------------------------------------------------------
-FROM node:20-alpine AS deps
+FROM node:20-slim AS deps
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN npm ci --prefer-offline --no-audit --no-fund --legacy-peer-deps
 # ---------------------------------------------------------------------------
 # Stage 2 — Build
 # ---------------------------------------------------------------------------
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
@@ -44,11 +44,11 @@ RUN npm run build
 # ---------------------------------------------------------------------------
 # Stage 3 — Production nginx server
 # ---------------------------------------------------------------------------
-FROM nginx:1.27-alpine AS production
+FROM nginx:1.27 AS production
 
 # Create non-root user
-RUN addgroup -g 1001 -S appgroup && \
-    adduser -u 1001 -S appuser -G appgroup
+RUN groupadd -g 1001 appgroup && \
+    useradd -u 1001 -g appgroup -s /bin/sh appuser
 
 # Remove default nginx config
 RUN rm -f /etc/nginx/conf.d/default.conf
