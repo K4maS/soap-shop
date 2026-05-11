@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { CookieNotice } from '../ui/CookieNotice';
 
 // =============================================================================
 // Layout — public-facing layout with header + footer
@@ -25,6 +26,8 @@ export function Layout() {
       </main>
 
       <Footer />
+
+      <CookieNotice />
 
       {/* Toast notifications */}
       <Toaster

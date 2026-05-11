@@ -45,28 +45,14 @@ export default function HomePage() {
                 rightIcon={<ArrowRight className="h-4 w-4" aria-hidden="true" />}
                 onClick={() => navigate('/catalog')}
               >
-                Смотреть каталог
+                Перейти в каталог
               </Button>
               <Link
                 to="/catalog?isFeatured=true"
                 className="inline-flex items-center gap-2 px-6 py-2.5 text-base font-medium text-warm-700 bg-white/80 hover:bg-white border border-warm-200 rounded-xl transition-colors"
               >
-                Хиты продаж
+                Популярные товары
               </Link>
-            </div>
-
-            {/* Stats */}
-            <div className="flex flex-wrap gap-8 mt-12">
-              {[
-                { value: '500+', label: 'видов товаров' },
-                { value: '10 000+', label: 'довольных клиентов' },
-                { value: '5 лет', label: 'на рынке' },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <p className="text-2xl font-bold text-warm-900 font-serif">{stat.value}</p>
-                  <p className="text-sm text-warm-500">{stat.label}</p>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -220,29 +206,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== B2B BANNER ===== */}
-      <section className="py-16" aria-labelledby="b2b-heading">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="bg-gradient-to-r from-sage-800 to-sage-600 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="text-white">
-              <h2 id="b2b-heading" className="font-serif text-2xl md:text-3xl font-bold mb-3">
-                Оптовые заказы B2B
-              </h2>
-              <p className="text-sage-200 text-sm md:text-base max-w-lg">
-                Специальные условия для розничных магазинов, спа-центров и корпоративных клиентов.
-                Собственная торговая марка, индивидуальная упаковка.
-              </p>
-            </div>
-            <Link
-              to="/wholesale"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-white text-sage-800 font-medium rounded-xl hover:bg-beige-50 transition-colors"
-            >
-              Узнать подробнее
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

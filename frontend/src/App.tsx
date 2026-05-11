@@ -16,6 +16,7 @@ const HomePage = lazy(() => import('@pages/HomePage'));
 const CatalogPage = lazy(() => import('@pages/CatalogPage'));
 const ProductPage = lazy(() => import('@pages/ProductPage'));
 const CartPage = lazy(() => import('@pages/CartPage'));
+const ReturnsPage = lazy(() => import('@pages/legal/ReturnsPage'));
 const CheckoutPage = lazy(() => import('@pages/CheckoutPage'));
 const OrdersPage = lazy(() => import('@pages/OrdersPage'));
 const ProfilePage = lazy(() => import('@pages/ProfilePage'));
@@ -88,6 +89,14 @@ export function App() {
                 element={
                   <RouteErrorBoundary>
                     <HomePage />
+                  </RouteErrorBoundary>
+                }
+              />
+              <Route
+                path="returns"
+                element={
+                  <RouteErrorBoundary>
+                    <ReturnsPage />
                   </RouteErrorBoundary>
                 }
               />

@@ -127,15 +127,25 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-warm-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-warm-500">
-          <p>© {currentYear} Mylo Master. Все права защищены.</p>
-          <div className="flex items-center gap-4">
-            <Link to="/privacy" className="hover:text-warm-300 transition-colors">
-              Политика конфиденциальности
-            </Link>
-            <Link to="/terms" className="hover:text-warm-300 transition-colors">
-              Условия использования
-            </Link>
+        <div className="mt-10 pt-6 border-t border-warm-800">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-warm-500 py-6">
+            <p>© {currentYear} Mylo Master. Все права защищены.</p>
+            <div className="flex items-center gap-4">
+              <Link to="/privacy" className="hover:text-warm-300 transition-colors">
+                Конфиденциальность
+              </Link>
+              <Link to="/terms" className="hover:text-warm-300 transition-colors">
+                Оферта
+              </Link>
+              <Link to="/returns" className="hover:text-warm-300 transition-colors">
+                Возврат
+              </Link>
+            </div>
+          </div>
+          <div className="pb-8 text-[10px] text-warm-600 border-t border-warm-800/50 pt-4">
+            <p>ИП Мыловаров Алексей Иванович</p>
+            <p>ОГРНИП: 321774600123456 | ИНН: 771234567890</p>
+            <p>Юридический адрес: 127006, г. Москва, ул. Малая Дмитровка, д. 20</p>
           </div>
         </div>
       </div>

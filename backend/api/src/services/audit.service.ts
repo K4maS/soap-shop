@@ -59,13 +59,14 @@ export class AuditService {
    * Writes an audit log entry.
    * This method NEVER throws — all errors are forwarded to pino.
    */
-  async log(action: AuditAction, ctx: AuditContext): Promise<void> {
+  async log(action: AuditAction, ctx: AuditContext, tx?: PrismaClient): Promise<void> {
     try {
       const sanitizedMetadata = ctx.metadata
         ? (this.sanitizeMetadata(ctx.metadata) as Record<string, any>)
         : undefined;
 
-      await this.prisma.auditLog.create({
+      const client = tx || this.prisma;
+      await client.auditLog.create({
         data: {
           action,
           actorId: ctx.actorId ?? null,
