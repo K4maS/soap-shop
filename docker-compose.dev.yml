@@ -1,0 +1,153 @@
+# =============================================================
+# MYLO MASTER — Development Docker Compose
+# Hot-reload, debug ports exposed, mock SMS/payments
+# =============================================================
+
+networks:
+  dev_net:
+    driver: bridge
+    name: mylo_dev
+
+volumes:
+  dev_postgres_data:
+  dev_redis_data:
+  dev_uploads:
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mylo_dev_postgres
+    ports:
+      - "5432:5432"  # Доступен локально для psql/TablePlus
+    environment:
+      - POSTGRES_DB=mylo_master_dev
+      - POSTGRES_USER=mylo_dev
+      - POSTGRES_PASSWORD=devpassword
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - dev_postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - dev_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mylo_dev -d mylo_master_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: mylo_dev_redis
+    ports:
+      - "6379:6379"  # Доступен локально для redis-cli
+    command: redis-server --requirepass devredispassword --loglevel verbose
+    volumes:
+      - dev_redis_data:/data
+    networks:
+      - dev_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "devredispassword", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  auth-service:
+    build:
+      context: ./backend
+      dockerfile: ./auth-service/Dockerfile
+      target: builder  # Используем builder stage для dev
+    container_name: mylo_dev_auth
+    command: npx tsx src/app.ts
+    ports:
+      - "3002:3002"
+      - "9229:9229"  # Node.js debugger
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - DATABASE_URL=postgresql://mylo_dev:devpassword@postgres:5432/mylo_master_dev
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=devredispassword
+      - JWT_ACCESS_SECRET=dev-access-secret-minimum-32-chars-long
+      - JWT_REFRESH_SECRET=dev-refresh-secret-minimum-32-chars-long
+      - JWT_ACCESS_EXPIRES=15m
+      - JWT_REFRESH_EXPIRES=7d
+      - ENCRYPTION_KEY=ZGV2LWVuY3J5cHRpb24ta2V5LTMyLWJ5dGVzIQ==
+      - CSRF_SECRET=dev-csrf-secret-minimum-32-chars
+      - SMS_PROVIDER=mock  # OTP выводится в консоль
+      - BCRYPT_ROUNDS=10  # Быстрее для разработки
+      - LOG_LEVEL=debug
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:4173
+    volumes:
+      - ./backend/auth-service/src:/app/src:ro
+    networks:
+      - dev_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  api:
+    build:
+      context: ./backend/api
+      dockerfile: Dockerfile
+      target: builder
+    container_name: mylo_dev_api
+    command: npx tsx src/app.ts
+    ports:
+      - "3001:3001"
+      - "9230:9230"  # Node.js debugger
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+      - DATABASE_URL=postgresql://mylo_dev:devpassword@postgres:5432/mylo_master_dev
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=devredispassword
+      - JWT_ACCESS_SECRET=dev-access-secret-minimum-32-chars-long
+      - ENCRYPTION_KEY=ZGV2LWVuY3J5cHRpb24ta2V5LTMyLWJ5dGVzIQ==
+      - LOG_LEVEL=debug
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:4173
+      - UPLOAD_PROVIDER=local
+      - LOCAL_UPLOAD_PATH=/app/uploads
+    volumes:
+      - ./backend/api/src:/app/src:ro
+      - dev_uploads:/app/uploads
+    networks:
+      - dev_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  admin-service:
+    build:
+      context: ./backend
+      dockerfile: ./admin-service/Dockerfile
+      target: builder
+    container_name: mylo_dev_admin
+    command: npx tsx src/app.ts
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=development
+      - PORT=3003
+      - DATABASE_URL=postgresql://mylo_dev:devpassword@postgres:5432/mylo_master_dev
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=devredispassword
+      - JWT_ACCESS_SECRET=dev-access-secret-minimum-32-chars-long
+      - ENCRYPTION_KEY=ZGV2LWVuY3J5cHRpb24ta2V5LTMyLWJ5dGVzIQ==
+      - LOG_LEVEL=debug
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:4173
+    volumes:
+      - ./backend/admin-service/src:/app/src:ro
+    networks:
+      - dev_net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy

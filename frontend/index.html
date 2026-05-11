@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta -->
+    <title>Mylo Master — натуральная косметика и мыло</title>
+    <meta name="description" content="Mylo Master — магазин натуральной косметики, мыла ручной работы и уходовых средств. B2B и B2C заказы." />
+    <meta name="keywords" content="мыло ручной работы, натуральная косметика, уход за кожей, купить мыло" />
+    <meta name="author" content="Mylo Master" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#fdf8f0" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mylo Master — натуральная косметика и мыло" />
+    <meta property="og:description" content="Магазин натуральной косметики и мыла ручной работы" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:locale" content="ru_RU" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mylo Master" />
+    <meta name="twitter:description" content="Натуральная косметика и мыло ручной работы" />
+
+    <!--
+      CSP NOTE:
+      Content-Security-Policy is intentionally set via HTTP response headers
+      (nginx config), NOT via a meta tag, to allow nonce-based script-src.
+      The nonce placeholder below is for server-side injection if needed.
+    -->
+    <!-- __CSP_NONCE_PLACEHOLDER__ -->
+
+    <!-- Preconnect to API origin -->
+    <link rel="preconnect" href="https://api.mylomaster.ru" crossorigin />
+
+    <!-- Google Fonts — preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- No inline scripts — CSP compliant -->
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Entry point — Vite injects the module script tag here -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- noscript fallback -->
+    <noscript>
+      <div style="font-family:sans-serif;text-align:center;padding:2rem;">
+        Для работы сайта необходимо включить JavaScript.
+      </div>
+    </noscript>
+  </body>
+</html>
